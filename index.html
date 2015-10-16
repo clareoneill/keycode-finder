@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>keycode finder | clare o’neill</title>
+	<style>
+		* {
+		  box-sizing: border-box;
+		}
+
+		body {
+		  font-family: 'Lato', sans-serif;
+		  font-size: 10rem;
+		  font-weight: 400;
+		  margin: 0;
+		  padding: 0;
+		  min-width: 320px;
+		}
+
+		p {
+		  font-weight: 900;
+		  font-size: 3rem;
+		}
+
+		small {
+		  font-size: 5rem;
+		  line-height: 2;
+		  display: block;
+		}
+
+		.half {
+		  width: 100%;
+		  padding: 30px;
+		  height: 50vh;
+		}
+		@media(min-width: 620px) {
+			.half {
+				width: 50%;
+				height: 100%;
+				position: fixed;
+				display: flex;
+				align-items: center;
+			}
+			.half:last-of-type {
+		    left: 50%;
+		  }
+		}
+
+		.input {
+		  background-color: #E0E0FF;
+		}
+
+		.result {
+		  background-color: #ccffff;
+		}
+
+		#key-str,
+		#key-code {
+		  height: 180px;
+		}
+	</style>
+</head>
+<body>
+	<div class="half input">
+	  <div class="content">
+	    <p>Press a key</p>
+	    <div id="key-str"></div>
+	  </div>
+	</div>
+	<div class="half result">
+	  <div class="content">
+	    <p>Keycode</p>
+	    <div id="key-code"></div>
+	  </div>
+	</div>
+
+	<script>
+		var t,
+		    s,
+		    pressedKey = {
+		      
+		      settings: {
+		        keyStr: document.getElementById('key-str'),
+		        keyCode: document.getElementById('key-code'),
+		        charCode: 0,
+		        charStr: ''
+		      },
+		      
+		      init: function() {
+		        t = this;
+		        s = t.settings;
+		        
+		        t.keyPress();
+		      },
+		      
+		      keyPress: function() {
+		        document.addEventListener('keypress', function(e) {
+		          e.preventDefault();
+		          
+		          s.keyStr.innerHTML = '';
+		          s.keyCode.innerHTML = '';
+		          s.charCode = e.keyCode || e.which;
+		          s.charStr =  String.fromCharCode( s.charCode );
+		          s.keyCode.innerHTML = s.charCode;
+		          if( s.charCode === 32 ) {
+		            s.keyStr.innerHTML = '<small>(space)</small>';
+		          } else {
+		            s.keyStr.innerHTML = s.charStr;
+		          }
+		        });
+		      }
+		    };
+
+		window.addEventListener('load', function() {
+		  pressedKey.init();
+		});
+	</script>
+</body>
+</html>
