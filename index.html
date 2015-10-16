@@ -94,18 +94,69 @@
 		      },
 		      
 		      keyPress: function() {
-		        document.addEventListener('keypress', function(e) {
-		          e.preventDefault();
+		      	document.addEventListener('keydown', function(event) {
+		          event.preventDefault();
 		          
 		          s.keyStr.innerHTML = '';
 		          s.keyCode.innerHTML = '';
-		          s.charCode = e.keyCode || e.which;
+		          s.charCode = event.keyCode || event.which;
 		          s.charStr =  String.fromCharCode( s.charCode );
 		          s.keyCode.innerHTML = s.charCode;
-		          if( s.charCode === 32 ) {
-		            s.keyStr.innerHTML = '<small>(space)</small>';
-		          } else {
-		            s.keyStr.innerHTML = s.charStr;
+
+		          switch ( s.charCode ) {
+		          	// space
+		          	case 32:
+		          		s.keyStr.innerHTML = '<small>(space)</small>';
+		          		break;
+
+		          	// caps lock
+		          	case 20:
+		          		s.keyStr.innerHTML = '<small>(capslock)</small>';
+		          		break;
+
+		          	// shift
+		          	case 16:
+		          		s.keyStr.innerHTML = '<small>(shift)</small>';
+		          		break;
+
+		          	// enter
+		          	case 13:
+		          		s.keyStr.innerHTML = '<small>(enter)</small>';
+		          		break;
+
+		          	// option
+		          	case 18:
+		          		s.keyStr.innerHTML = '<small>(option)</small>';
+		          		break;
+
+		          	// control
+		          	case 17:
+		          		s.keyStr.innerHTML = '<small>(control)</small>';
+		          		break;
+
+		          	// clear
+		          	case 12:
+		          		s.keyStr.innerHTML = '<small>(clear)</small>';
+		          		break;
+
+		          	// esc
+		          	case 27:
+		          		s.keyStr.innerHTML = '<small>(esc)</small>';
+		          		break;
+
+		          	// delete
+		          	case 8:
+		          		s.keyStr.innerHTML = '<small>(delete)</small>';
+		          		break;
+
+		          	// tab
+		          	case 9:
+		          		s.keyStr.innerHTML = '<small>(tab)</small>';
+		          		break;
+		          	// everything else
+		          	default:
+		          		s.keyStr.innerHTML = s.charStr;
+		          		break;
 		          }
 		        });
 		      }
