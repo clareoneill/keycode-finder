@@ -10,8 +10,9 @@
 
 		body {
 		  font-family: 'Lato', sans-serif;
-		  font-size: 10rem;
+		  font-size: 3rem;
 		  font-weight: 400;
+		  text-align: center;
 		  margin: 0;
 		  padding: 0;
 		  min-width: 320px;
@@ -19,13 +20,28 @@
 
 		p {
 		  font-weight: 900;
-		  font-size: 3rem;
+		  margin: 0;
 		}
 
 		small {
 		  font-size: 5rem;
 		  line-height: 2;
 		  display: block;
+		}
+
+		.hidden {
+			visibility: hidden;
+		}
+
+		#start {
+			font-size: 6rem;
+			line-height: 1;
+			position: fixed;
+			padding: 30px;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			z-index: 1;
 		}
 
 		.half {
@@ -40,6 +56,8 @@
 				position: fixed;
 				display: flex;
 				align-items: center;
+				justify-content: center;
+				z-index: 0;
 			}
 			.half:last-of-type {
 		    left: 50%;
@@ -54,23 +72,26 @@
 		  background-color: #ccffff;
 		}
 
-		#key-str,
-		#key-code {
-		  height: 180px;
+		.output {
+			font-size: 10rem;
+			height: 180px;
 		}
 	</style>
 </head>
 <body>
+	<div id="start">
+		<p>press a key to start</p>
+	</div>
 	<div class="half input">
-	  <div class="content">
-	    <p>Press a key</p>
-	    <div id="key-str"></div>
+	  <div class="content hidden">
+	    <p>key string</p>
+	    <div id="key-str" class="output"></div>
 	  </div>
 	</div>
 	<div class="half result">
-	  <div class="content">
-	    <p>Keycode</p>
-	    <div id="key-code"></div>
+	  <div class="content hidden">
+	    <p>key code</p>
+	    <div id="key-code" class="output"></div>
 	  </div>
 	</div>
 
@@ -83,7 +104,10 @@
 		        keyStr: document.getElementById('key-str'),
 		        keyCode: document.getElementById('key-code'),
 		        charCode: 0,
-		        charStr: ''
+		        charStr: '',
+		        keyStart: false,
+		        startDiv: document.getElementById('start'),
+		        contentDivs: document.getElementsByClassName('content')
 		      },
 		      
 		      init: function() {
@@ -96,13 +120,35 @@
 		      keyPress: function() {
 		        document.addEventListener('keydown', function(event) {
 		          event.preventDefault();
+
+		          // first keydown
+		          if( !s.keyStart ) {
+		          	// hide the start div
+		          	if( s.startDiv.classList ) {
+		          	  s.startDiv.classList.add('hidden');
+		          	}
+		          	// reveal the content divs
+		          	for( var i = 0; i < s.contentDivs.length; i++ ) {
+		          		if( s.contentDivs[i].classList ) {
+		          		  s.contentDivs[i].classList.remove('hidden');
+		          		}
+		          	}
+		          	// set keystart to true
+		          	s.keyStart = true;
+		          }
 		          
+		          // clear the output divs
 		          s.keyStr.innerHTML = '';
 		          s.keyCode.innerHTML = '';
+		          // get the character code
 		          s.charCode = event.keyCode || event.which;
+		          // get the character string
+		          // and stick it in the key code output div
 		          s.charStr =  String.fromCharCode( s.charCode );
 		          s.keyCode.innerHTML = s.charCode;
 
+		          // run through the codes that don't have an output
+		          // and assign strings to them
 		          switch ( s.charCode ) {
 		          	// space
 		          	case 32:
@@ -153,6 +199,7 @@
 		          	case 9:
 		          		s.keyStr.innerHTML = '<small>(tab)</small>';
 		          		break;
+		          		
 		          	// everything else
 		          	default:
 		          		s.keyStr.innerHTML = s.charStr;
